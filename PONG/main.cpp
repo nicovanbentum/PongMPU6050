@@ -1,10 +1,19 @@
+//==========================================================
+// Nico van Bentum | nico.vanbentum@student.hu.nl
+// 
+// Distributed under the Boost Software License, Version 1.0. 
+// http://www.boost.org/LICENSE_1_0.txt
+//==========================================================
+//
+/// @file
+
 #include "hwlib.hpp"
 #include "object.hpp"
 #include "vector2i.hpp"
-#include "MPU6050.hpp"
+#include "../MPU6050/MPU6050.hpp"
 
-int main( void ){
-    
+int main()
+{
    // kill the watchdog
    WDT->WDT_MR = WDT_MR_WDDIS;
    
@@ -42,28 +51,38 @@ int main( void ){
   for(;;) //game loop
   {
 	  
-	  
 	  int az = MPU_sensor.readAccelZ()*1000;
+	  //int ay = MPU_sensor.readAccelY()*1000;
+	  int az_input = MPU_sensor.map(az, -200, 350, 2, -2);
+	  //int ay_input = MPU_sensor.map(ay, -450, 250, 2, -2);
+	  
+	  player.move(vector2i(0, az_input));
+	  //npc.move(vector2i(0, ay_input));
+	  
+	  if(button1.get())
+	  {
+		  npc.move(vector2i(0, -2));
+	  }
+	  else if(button2.get())
+	  {
+		  npc.move(vector2i(0, 2));
+	  }
+
 	  
 	  //clear the buffer
 	  display.clear();
 	  
 	  //button input (gyro WIP)
-	  if(az > 200)
-	  {
-		  player.move(vector2i(0,-2));
-	  }
-	  else if(az < -200)
-	  {
-		  player.move(vector2i(0,2));
-	  }
+
 
 	  //abstract collision detection
 	  if(pong_ball.bGame_over(pong_ball))
 	  {
 		  int ball_reset_y = rand() % 50 + 10;
 		  pong_ball.setPos(vector2i(pong_ball.origin.x, ball_reset_y));
-		  npc.setPos(vector2i(npc.origin.x, ball_reset_y-5));
+		  //npc.setPos(vector2i(npc.origin.x, ball_reset_y-5));
+		  npc.setPos(vector2i(npc.origin.x, npc.origin.y));
+		  player.setPos(vector2i(player.origin.x, player.origin.y));
 		  
 		  score-=5;
 		  hwlib::cout << "score: " << score << "\n";
@@ -88,7 +107,8 @@ int main( void ){
 	  
 	  //move game objects
 	  pong_ball.move(move_ball);
-	  npc.move(vector2i(0, move_ball.y));	 
+	  //npc.move(vector2i(0, move_ball.y));	 //super complicated deep- machine- learning 
+											//algorithm for unbeatable AI
 	  
 	  //send the buffer to the screen
 	  display.flush();

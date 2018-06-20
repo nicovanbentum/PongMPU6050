@@ -1,3 +1,12 @@
+//==========================================================
+// Nico van Bentum | nico.vanbentum@student.hu.nl
+// 
+// Distributed under the Boost Software License, Version 1.0. 
+// http://www.boost.org/LICENSE_1_0.txt
+//==========================================================
+//
+/// @file
+
 #include "object.hpp"
 
 object::object(hwlib::glcd_oled_buffered & display, vector2i origin, vector2i size):
