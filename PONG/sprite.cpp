@@ -53,7 +53,7 @@ char sprite::bCollides(sprite & player, sprite & npc)
 	}
 }
 
-bool sprite::bGame_over(sprite & ball_to_reset)
+bool sprite::bGame_over()
 {
 	if(pos.x <= 0 || pos.x >= 128-size.x)
 	{

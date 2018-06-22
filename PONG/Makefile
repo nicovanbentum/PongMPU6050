@@ -9,10 +9,10 @@
 #############################################################################
 
 # source files in this project (main.cpp is automatically assumed)
-SOURCES := object.cpp ../MPU6050/MPU6050.cpp
+SOURCES := sprite.cpp ../MPU6050/sensors.cpp ../MPU6050/MPU6050.cpp
 
 # header files in this project
-HEADERS := object.hpp vector2i.hpp ../MPU6050/MPU6050.hpp
+HEADERS := sprite.hpp vector2i.hpp ../MPU6050/sensors.hpp ../MPU6050/MPU6050.hpp
 
 # other places to look for files for this project
 SEARCH  :=

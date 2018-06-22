@@ -54,37 +54,6 @@ void MPU6050::readGyro(float & gx, float & gy, float & gz)
 	gz = readGyroZ();
 }
 
-void calcAngles(float & pitch, float & yaw, const float & dt)
-{
-	
-}
-
-///\details
-///calibrates all 6 axis base values n number of times.
-void MPU6050::calibrate(unsigned int n)
-{
-	//ugly way to ignore initial register values
-	readGyroX(); readGyroY(); readGyroZ(); readAccelX(); readAccelY(); readAccelZ();
-	
-	for(unsigned int i = 0; i <= n; i++)
-	{
-		bgx += readGyroX();
-		bgy += readGyroY();
-		bgz += readGyroZ();
-		bax += readAccelX();
-		bay += readAccelY();
-		baz += readAccelZ();
-		hwlib::wait_ms(1);
-	}
-	
-	bgx/=n;
-	bgy/=n;
-	bgz/=n;
-	bax/=n;
-	bay/=n;
-	baz/=n;
-}
-
 ///\details
 ///returns an int16 made from the H and L register bytes.
 int16_t MPU6050::readGyroX()

@@ -9,10 +9,10 @@
 #############################################################################
 
 # source files in this project (main.cpp is automatically assumed)
-SOURCES := MPU6050.cpp
+SOURCES := MPU6050.cpp sensors.cpp
 
 # header files in this project
-HEADERS := MPU6050.hpp
+HEADERS := MPU6050.hpp sensors.hpp
 
 # other places to look for files for this project
 SEARCH  :=
