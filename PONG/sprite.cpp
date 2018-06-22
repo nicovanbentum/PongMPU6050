@@ -7,16 +7,16 @@
 //
 /// @file
 
-#include "object.hpp"
+#include "sprite.hpp"
 
-object::object(hwlib::glcd_oled_buffered & display, vector2i origin, vector2i size):
+sprite::sprite(hwlib::glcd_oled_buffered & display, vector2i origin, vector2i size):
 display(display),
 origin(origin),
 size(size),
 pos(origin)
 {}
 
-void object::draw()
+void sprite::draw()
 {
 	for(int i = pos.x; i <= size.x+pos.x; i++)
 	{
@@ -27,13 +27,15 @@ void object::draw()
 	}
 }
 
-void object::move(vector2i coords)
+void sprite::move(vector2i coords)
 {
 	pos.x += coords.x;
 	pos.y += coords.y;
 }
 
-char object::bCollides(object & player, object & npc)
+///\details
+///returns a char based on what it collided with. an l for level, p for player, n for npc or 0 if nothing.
+char sprite::bCollides(sprite & player, sprite & npc)
 {
 	if(pos.y <= 0 || pos.y >= 64-size.y)
 	{
@@ -47,11 +49,11 @@ char object::bCollides(object & player, object & npc)
 	{
 		return 'n'; //'n' as in npc collision
 	}else{
-		return 'f';
+		return 0;
 	}
 }
 
-bool object::bGame_over(object & ball_to_reset)
+bool sprite::bGame_over(sprite & ball_to_reset)
 {
 	if(pos.x <= 0 || pos.x >= 128-size.x)
 	{
@@ -61,7 +63,7 @@ bool object::bGame_over(object & ball_to_reset)
 	return false;
 }
 
-void object::setPos(vector2i moveto)
+void sprite::setPos(vector2i moveto)
 {
 	pos.x = moveto.x;
 	pos.y = moveto.y;

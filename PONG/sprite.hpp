@@ -13,7 +13,7 @@
 #include "hwlib.hpp"
 #include "vector2i.hpp"
 
-class object
+class sprite
 {
 private:
 	hwlib::glcd_oled_buffered & display;
@@ -24,11 +24,11 @@ public:
 	vector2i pos;
 
 	
-	object(hwlib::glcd_oled_buffered & display, vector2i origin, vector2i size);
+	sprite(hwlib::glcd_oled_buffered & display, vector2i origin, vector2i size);
 	void draw();
 	void move(vector2i coords);
-	char bCollides(object & player, object & npc);
-	bool bGame_over(object & ball);
+	char bCollides(sprite & player, sprite & npc);
+	bool bGame_over(sprite & ball);
 	void setPos(vector2i moveto);
 };
 

@@ -34,24 +34,41 @@ private:
 	static constexpr const uint8_t ACC_ZOUT_H		= 0x3F;
 	static constexpr const uint8_t ACC_ZOUT_L		= 0x40;
 	static constexpr const uint8_t PWR_MGMT_1 		= 0x6B;
+	static constexpr const float AFS_SEL 			= 16384;
 	
 	hwlib::i2c_bus_bit_banged_scl_sda & i2cbus;
 	
+protected:
+	//base values for calibration.
+	float bax = 0, bay = 0, baz = 0, bgx = 0, bgy = 0, bgz = 0;
+	
+	//raw values.
+	float ax = 0, ay = 0, az = 0, gx = 0, gy = 0, gz = 0;
+	
 public:
+	
+	//ba
 	MPU6050(hwlib::i2c_bus_bit_banged_scl_sda & i2cbus):
 	i2cbus(i2cbus)
 	{}
 
 	void init();
-	void setFifo_EN(int bit);
-	float readGyroX();
-	float readGyroY();
-	float readGyroZ();
+	void calibrate(unsigned int n);
+	int8_t whoAmI();
+
+	void readAccel(float & ax, float & ay, float & az);
+	void readGyro(float & gx, float & gy, float & gz);
+	void calcAngles(float & pitch, float & roll, const float & dt);
+	
+	int16_t readGyroX();
+	int16_t readGyroY();
+	int16_t readGyroZ();
 	float readAccelX();
 	float readAccelY();
 	float readAccelZ();
+	
 	int map(int val, int inputMin, int inputMax, int outputMin, int outputMax);
-	int8_t whoAmI();
+	
 };
 
 
