@@ -10,8 +10,6 @@
 #include "sensors.hpp"
 #include <cmath>
 
-///\details
-///writes the register values to the sensor class' raw values.
 void sensors::readAccel(float & ax, float & ay, float & az)
 {
 	ax = MPU6050::readAccelX();
@@ -19,8 +17,6 @@ void sensors::readAccel(float & ax, float & ay, float & az)
 	az = MPU6050::readAccelZ();
 }
 
-///\details
-///writes the register values to the sensor class' raw values.
 void sensors::readGyro(float & gx, float & gy, float & gz)
 {
 	gx = MPU6050::readGyroX();
@@ -28,8 +24,6 @@ void sensors::readGyro(float & gx, float & gy, float & gz)
 	gz = MPU6050::readGyroZ();
 }
 
-///\details
-///combines the gyro and accelerometer values to output a pitch and roll angle.
 void sensors::calcAngles(float & pitch, float & roll, const float & dt)
 {
 	readGyro(gx, gy, gz);
@@ -38,7 +32,7 @@ void sensors::calcAngles(float & pitch, float & roll, const float & dt)
 	float gyro_x = (gx - bgx) / GFS_SEL;
 	float gyro_y = (gy - bgy) / GFS_SEL;
 	   
-	//accelerometer angles
+	//accelerometer angles , needs cmath
 	float accel_angle_x = atan(ay/sqrt(ax*ax + az*az)) *(180/3.14159);
 	float accel_angle_y = atan(ax/sqrt(ay*ay + az*az)) *(-180/3.14159);
 
@@ -54,8 +48,6 @@ void sensors::calcAngles(float & pitch, float & roll, const float & dt)
 	roll = accel_angle_y;
 }
 
-///\details
-///calibrates all 6 axis base values n number of times.
 void sensors::calibrate(unsigned int n)
 {
 	//ugly way to ignore initial register values

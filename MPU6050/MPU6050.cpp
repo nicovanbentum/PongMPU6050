@@ -9,9 +9,6 @@
 
 #include "MPU6050.hpp"
 
-///\details
-///writes 0 to the power management register and 1 to the FIFO enable register.
-///This turns low power mode off and enables the FIFO buffer for read and write.
 void MPU6050::init()
 {
 	uint8_t data[] = {PWR_MGMT_1, 0x0};
@@ -22,9 +19,6 @@ void MPU6050::init()
 	i2cbus.write(ADDR, data_fifo, sizeof(data_fifo));
 }
 
-///\details
-///reads the WHO_AM_I register at 0x75.
-///by default returns 0x68.
 int8_t MPU6050::whoAmI()
 {
 	uint8_t data[] = {WHO_AM_I};
@@ -33,29 +27,6 @@ int8_t MPU6050::whoAmI()
 	return data[0];
 }
 
-///\details
-///Takes 3 declared floats. Assigns the read register values 
-///from accel x, y and z to the parameter variables.
-void MPU6050::readAccel(float & ax, float & ay, float & az)
-{
-	
-	ax = readAccelX();
-	ay = readAccelY();
-	az = readAccelZ();
-}
-
-///\details
-///Takes 3 declared floats. Assigns the int16_t register values 
-///from gyro x, y and z to the parameter variables.
-void MPU6050::readGyro(float & gx, float & gy, float & gz)
-{
-	gx = readGyroX();
-	gy = readGyroY();
-	gz = readGyroZ();
-}
-
-///\details
-///returns an int16 made from the H and L register bytes.
 int16_t MPU6050::readGyroX()
 {
 	uint8_t data_H[1] = {GYRO_XOUT_H};
@@ -70,8 +41,7 @@ int16_t MPU6050::readGyroX()
 	ret = (data_H[0] << 8) + data_L[0];
 	return ret;
 }
-///\details
-///See readGyroX().
+
 int16_t MPU6050::readGyroY()
 {
 	uint8_t data_H[1] = {GYRO_YOUT_H};
@@ -87,8 +57,6 @@ int16_t MPU6050::readGyroY()
 	return ret;
 }
 
-///\details
-///See readGyroX().
 int16_t MPU6050::readGyroZ()
 {
 	uint8_t data_H[1] = {GYRO_ZOUT_H};
@@ -104,8 +72,7 @@ int16_t MPU6050::readGyroZ()
 	return ret;
 }
 
-///\details
-///See readGyroX().
+
 float MPU6050::readAccelX()
 {
 	uint8_t data_H[1] = {ACC_XOUT_H};
@@ -118,11 +85,10 @@ float MPU6050::readAccelX()
 	
 	int16_t ret = 0;
 	ret = (data_H[0] << 8) + data_L[0];
-	return (ret/AFS_SEL);
+	return ret/AFS_SEL;
 }
 
-///\details
-///See readGyroX().
+
 float MPU6050::readAccelY()
 {
 	uint8_t data_H[1] = {ACC_YOUT_H};
@@ -138,8 +104,6 @@ float MPU6050::readAccelY()
 	return ret/AFS_SEL;
 }
 
-///\details
-///See readGyroX().
 float MPU6050::readAccelZ()
 {
 	uint8_t data_H[1] = {ACC_ZOUT_H};
@@ -155,8 +119,6 @@ float MPU6050::readAccelZ()
 	return ret/AFS_SEL;
 }
 
-/// \details
-/// Returns a range-based value calculated from a value in another range.
 int MPU6050::map(int val, int inputMin, int inputMax, int outputMin, int outputMax) 
 {
     return ((val - inputMin) * (outputMax - outputMin)) / (inputMax - inputMin) + outputMin;

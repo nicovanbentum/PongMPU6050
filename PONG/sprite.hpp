@@ -13,6 +13,13 @@
 #include "hwlib.hpp"
 #include "vector2i.hpp"
 
+/// \brief
+/// Sprite class.
+/// \details
+/// Implements a pong sprite (rectangle shape) based 
+/// on a given size and position.
+/// Uses adt vector2i to do coordinate calculations.
+
 class sprite
 {
 private:
@@ -25,6 +32,8 @@ public:
 
 	
 	sprite(hwlib::glcd_oled_buffered & display, vector2i origin, vector2i size);
+	
+	
 	void draw();
 	void move(vector2i coords);
 	char bCollides(sprite & player, sprite & npc);
