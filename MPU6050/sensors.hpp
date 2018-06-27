@@ -22,10 +22,12 @@
 class sensors : public MPU6050
 {
 private:
-	//base values for calibration.
+	/// \brief
+	/// Base values for calibration.
 	float bax = 0, bay = 0, baz = 0, bgx = 0, bgy = 0, bgz = 0;
 	
-	//raw values.
+	/// \brief
+	/// raw sensor values.
 	float ax = 0, ay = 0, az = 0, gx = 0, gy = 0, gz = 0;
 	
 public:
@@ -39,22 +41,23 @@ public:
 	{}
 	
 	/// \brief
-	/// Calibrates the gyro and accelerometer before use.
+	/// Calibrates the gyroscopes' and accelerometers' base values.
 	/// \details
-	/// Use to calibrate the raw base values, loops 'n' times.
+	/// Lay the chip on a flat surface and don't move it. The function will read the
+	/// raw values n times, divided by n, to determine base values.
 	/// does NOT set chip rotation at call time as offset.
 	void calibrate(unsigned int n);
 	
 	/// \brief
 	/// reads the accelerometer's raw values from the chip's registers.
 	/// \details
-	/// Takes 3 declared floats to store the values in.
+	/// Takes 3 pre-declared floats to store the values in.
 	void readAccel(float & ax, float & ay, float & az);
 	
 	/// \brief
 	/// reads the gyroscope's raw values from the chip's registers.
 	/// \details
-	/// Takes 3 declared floats to store the raw values in.
+	/// Takes 3 pre-declared floats to store the raw values in.
 	void readGyro(float & gx, float & gy, float & gz);
 	
 	/// \brief
@@ -63,7 +66,7 @@ public:
 	/// \details
 	/// The \p dt parameter is the time between sensor readings,
 	/// this needs to be measured beforehand. E.g if the measured time
-	/// is 50 ms, dt is 0.050.
+	/// is 50 ms, dt is 0.050. This can be left at 0 for slightly less accurate readings.
 	void calcAngles(float & pitch, float & roll, const float & dt);
 };
 

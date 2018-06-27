@@ -10,18 +10,18 @@
 #include "sensors.hpp"
 #include <cmath>
 
-void sensors::readAccel(float & ax, float & ay, float & az)
+void sensors::readAccel(float & acc_x, float & acc_y, float & acc_z)
 {
-	ax = MPU6050::readAccelX();
-	ay = MPU6050::readAccelY();
-	az = MPU6050::readAccelZ();
+	acc_x = MPU6050::readAccelX();
+	acc_y = MPU6050::readAccelY();
+	acc_z = MPU6050::readAccelZ();
 }
 
-void sensors::readGyro(float & gx, float & gy, float & gz)
+void sensors::readGyro(float & gyro_x, float & gyro_y, float & gyro_z)
 {
-	gx = MPU6050::readGyroX();
-	gy = MPU6050::readGyroY();
-	gz = MPU6050::readGyroZ();
+	gyro_x = MPU6050::readGyroX();
+	gyro_y = MPU6050::readGyroY();
+	gyro_z = MPU6050::readGyroZ();
 }
 
 void sensors::calcAngles(float & pitch, float & roll, const float & dt)

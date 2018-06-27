@@ -50,7 +50,7 @@ int main()
    float roll2 = 0;
    
    //delta time measured with hwlib::now_us() (doing this for every frame manually is too taxing and slows down the game).
-   float dt = 0.051;
+   float dt = 0.050;
    
    auto player = sprite(display, vector2i(0,28), vector2i(2, 10));
    auto npc = sprite(display, vector2i(125, 28), vector2i(2, 10));
@@ -66,8 +66,10 @@ int main()
 	  IMU.calcAngles(pitch, roll, dt);
 	  IMU2.calcAngles(pitch2, roll2, dt);
 	  
-	  int input_pitch = IMU.map(pitch, -20, 20, -3, 3);
-	  int input_roll = IMU2.map(roll2, -20, 20, -3, 3);
+	  int input_pitch = IMU.map(pitch, -30, 30, -3, 3);
+	  int input_roll = IMU2.map(roll2, -30, 30, -3, 3);
+	  
+	  hwlib::cout << (int)pitch2 << "\n";
 	  
 	  player.move(vector2i(0, input_roll));
 	  npc.move(vector2i(0, input_pitch));
@@ -84,8 +86,6 @@ int main()
 		  npc.setPos(vector2i(npc.origin.x, npc.origin.y));
 		  player.setPos(vector2i(player.origin.x, player.origin.y));
 		  
-		  score-=5;
-		  hwlib::cout << "score: " << score << "\n";
 	  }
 	  
 	  switch(pong_ball.bCollides(player, npc))

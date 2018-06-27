@@ -54,15 +54,10 @@ private:
 	hwlib::i2c_bus_bit_banged_scl_sda & i2cbus;
 	
 protected:
-	// FS_SEL values to calculate angles.
+	/// \brief
+	/// FS_SEL values to calculate angles.
 	static constexpr const float AFS_SEL 			= 16384;
-	static constexpr const float GFS_SEL			= 131;	
-	
-	// raw base values for calibration.
-	float bax = 0, bay = 0, baz = 0, bgx = 0, bgy = 0, bgz = 0;
-	
-	// raw values.
-	float ax = 0, ay = 0, az = 0, gx = 0, gy = 0, gz = 0;
+	static constexpr const float GFS_SEL			= 131;
 	
 public:
 	
@@ -81,13 +76,6 @@ public:
 	/// Writes 0 to the power management register and 1 to the FIFO enable register.
 	/// This turns low power mode off and enables the FIFO buffer for read and write.
 	void init();
-	
-	/// \brief
-	/// Calibrates the gyroscopes' and accelerometers' base values.
-	/// \details
-	/// Lay the chip on a flat surface and don't move it. The function will read the
-	/// raw values n times, divided by n, to determine base values.
-	void calibrate(unsigned int n);
 	
 	/// \brief
 	/// Return the chips' address in hex.
@@ -138,7 +126,7 @@ public:
 	/// \brief
 	/// Range based map function.
 	/// \details
-	/// Maps a value within a given range to a new value in a different range.
+	/// Map a value within a given range to a new value in a different range.
 	int map(int val, int inputMin, int inputMax, int outputMin, int outputMax);
 	
 };
