@@ -30,6 +30,8 @@ private:
 	//MPU6050 register addresses
 	static constexpr const uint8_t ADDR 			= 0x68;
 	static constexpr const uint8_t WHO_AM_I 		= 0x75;
+	static constexpr const uint8_t TEMP_OUT_H		= 0x41;
+	static constexpr const uint8_t TEMP_OUT_L		= 0x42;
 	static constexpr const uint8_t FIFO_EN			= 0x23;
 	static constexpr const uint8_t FIFO_R_W			= 0x74;
 	static constexpr const uint8_t USER_CTRL 		= 0x6A;
@@ -50,14 +52,18 @@ private:
 	static constexpr const uint8_t ACC_ZOUT_L		= 0x40;
 	static constexpr const uint8_t PWR_MGMT_1 		= 0x6B;
 
-	// see Hwlib for more info
+	/// \brief
+	/// See Hwlib for more info
 	hwlib::i2c_bus_bit_banged_scl_sda & i2cbus;
 	
 protected:
 	/// \brief
-	/// FS_SEL values to calculate angles.
-	static constexpr const float AFS_SEL 			= 16384;
-	static constexpr const float GFS_SEL			= 131;
+	/// Accelerometer sensitivity to calculate angles.
+	float AFS_SEL 			= 16384;
+	
+	/// \brief
+	/// Gyroscope sensitivity to calculate angles.
+	float GFS_SEL			= 131;
 	
 public:
 	
@@ -80,14 +86,49 @@ public:
 	/// \brief
 	/// Return the chips' address in hex.
 	/// \details
-	/// Reads the WHO_AM_I register at 0x75.
+	/// Read the WHO_AM_I register at 0x75.
 	/// by default returns 0x68.
 	int8_t whoAmI();
 	
 	/// \brief
+	/// Set gyro and accelerometer sensitivity.
+	/// \details
+	/// Set the class' AFS_SEL and GFS_SEL to the parameter variables.
+	/// Use setSensChip() to set the register value.
+	/// 
+	/// Taken from the datasheet:
+	/// Gyro ( FS_SEL = sensitivity )
+	/// 0 = 131, 1 = 65.5, 2 = 32.8, 3 = 16.4
+	/// 
+	/// Accel ( FS_SEL = sensitivity )
+	/// 0 = 16384, 1 = 8192, 2 = 4096, 3 = 2048
+	void setSensValues(float accel_sens, float gyro_sens);
+	
+	
+	/// \brief
+	/// Write to the accel and gyro config registers.
+	/// \details
+	/// Write the FS_SEL to the internal registers.
+	/// Give it either a 0, 1, 2 or 3, anything higher won't write.
+	/// 
+	/// Taken from the datasheet:
+	/// Gyro ( FS_SEL = sensitivity )
+	/// 0 = 131, 1 = 65.5, 2 = 32.8, 3 = 16.4
+	/// 
+	/// Accel ( FS_SEL = sensitivity )
+	/// 0 = 16384, 1 = 8192, 2 = 4096, 3 = 2048
+	void setSensChip(uint8_t afs, uint8_t gfs);
+	
+	/// \brief
+	/// Read sensor temperature.
+	/// \details
+	/// Return the sensor temperature in degrees C.
+	int16_t readTemp();
+	
+	/// \brief
 	/// Read the gyroscope X registers. 
 	/// \details
-	/// Reads the H and L gyro registers. 
+	/// Read the H and L gyro registers. 
 	/// Returns/combines these two bytes into one 16 bit int.
 	int16_t readGyroX();
 	
@@ -124,10 +165,17 @@ public:
 	float readAccelZ();
 	
 	/// \brief
+	/// Read a single register.
+	/// \details
+	/// This function should be used for testing purposes or
+	/// extra operations that this library doesn't contain.
+	uint8_t readRegister(uint8_t reg);
+	
+	/// \brief
 	/// Range based map function.
 	/// \details
 	/// Map a value within a given range to a new value in a different range.
-	int map(int val, int inputMin, int inputMax, int outputMin, int outputMax);
+	float map(float val, float inputMin, float inputMax, float outputMin, float outputMax);
 	
 };
 

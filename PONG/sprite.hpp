@@ -35,7 +35,8 @@ public:
 	
 	
 	void draw();
-	void move(vector2i coords);
+	void paddle_move(vector2i coords);
+	void ball_move(vector2i coords);
 	char bCollides(sprite & player, sprite & npc);
 	bool bGame_over();
 	void setPos(vector2i moveto);

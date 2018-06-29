@@ -44,61 +44,56 @@ int main()
    IMU.calibrate(10);
    IMU2.calibrate(10);
    
-   float pitch = 0;
-   float roll = 0;
-   float pitch2 = 0;
-   float roll2 = 0;
+   float pitch = 0, roll = 0, pitch2 = 0, roll2 = 0;
    
-   //delta time measured with hwlib::now_us() (doing this for every frame manually is too taxing and slows down the game).
+   //delta time measured with hwlib::now_us()
    float dt = 0.050;
    
-   auto player = sprite(display, vector2i(0,28), vector2i(2, 10));
-   auto npc = sprite(display, vector2i(125, 28), vector2i(2, 10));
+   auto player = sprite(display, vector2i(0,28), vector2i(2, 12));
+   auto npc = sprite(display, vector2i(125, 28), vector2i(2, 12));
    auto pong_ball = sprite(display, vector2i(62, 30), vector2i(2,2));
    vector2i move_ball(-2,-2);
    
-   int p_score = 0;
-   int n_score = 0;
+   int score = 0;
 	  
   for(;;) //game loop (measured 50ms(20 loops/fps) human eye can't see more than 20 fps anyway
   {
-	  
+	  //get both sensor angles
 	  IMU.calcAngles(pitch, roll, dt);
 	  IMU2.calcAngles(pitch2, roll2, dt);
 	  
-	  int input_pitch = IMU.map(pitch, -30, 30, -3, 3);
-	  int input_roll = IMU2.map(roll2, -30, 30, -3, 3);
+	  //map angle values to players' input
+	  int input_pitch = IMU.map(pitch, -20, 20, 3, -3);
+	  int input_roll = IMU2.map(roll2, -20, 20, -3, 3);
 	  
-	  hwlib::cout << (int)pitch2 << "\n";
-	  
-	  player.move(vector2i(0, input_roll));
-	  npc.move(vector2i(0, input_pitch));
+	  //hwlib::cout << (int)pitch << "  " << (int)pitch2 << "\n";
+	  //hwlib::cout << (int)roll << "  " << (int)roll2 << "\n";
 	  
 	  //clear the buffer
 	  display.clear();
 
-	  //abstract collision detection
+	  //reset all sprites back to origin if ball goes out of bounds
 	  if(pong_ball.bGame_over())
 	  {
+		  //randomize ball spawns
 		  int ball_reset_y = rand() % 50 + 10;
 		  
 		  pong_ball.setPos(vector2i(pong_ball.origin.x, ball_reset_y));
-		  npc.setPos(vector2i(npc.origin.x, npc.origin.y));
-		  player.setPos(vector2i(player.origin.x, player.origin.y));
-		  
+		  score = 0;
 	  }
 	  
+	  //abstract collision detection
 	  switch(pong_ball.bCollides(player, npc))
 	  {
 		  case 'p' : move_ball.x *= -1;
-					 p_score+=5;
-					 hwlib::cout << "score: " << p_score << "\n";
+					 score+=5;
+					 hwlib::cout << "score: " << score << "\n";
 					 break;
 		  case 'l' : move_ball.y *= -1;
 					 break;
 		  case 'n' : move_ball.x *= -1;
-					 n_score+=5;
-					 hwlib::cout << "score: " << n_score << '\n';
+					 score+=5;
+					 hwlib::cout << "score: " << score << '\n';
 					 break;
 	  }
 	  
@@ -107,8 +102,10 @@ int main()
 	  npc.draw();
 	  player.draw();
 	  
-	  //update ball
-	  pong_ball.move(move_ball);
+	  //update sprites
+	  player.paddle_move(vector2i(0, input_roll));
+	  npc.paddle_move(vector2i(0, input_pitch));
+	  pong_ball.ball_move(move_ball);
 	  
 	  //send the buffer to the screen
 	  display.flush();

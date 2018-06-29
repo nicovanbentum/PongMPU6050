@@ -9,13 +9,6 @@
 
 #include "sprite.hpp"
 
-/// \brief
-/// Sprite constructor.
-/// \details
-/// Constructs a pong sprite (basically a rectangle shape) off a given \p size .
-/// Position is determined from the top left of the rectangle.
-/// Origin is the objects' original position.
-/// needs a hwlib oled display object to write to.
 sprite::sprite(hwlib::glcd_oled_buffered & display, vector2i origin, vector2i size):
 display(display),
 origin(origin),
@@ -23,10 +16,6 @@ size(size),
 pos(origin)
 {}
 
-/// \brief
-/// Sprite draw function.
-/// \details
-/// Write the sprites' pixels to the hwlib display buffer.
 void sprite::draw()
 {
 	for(int i = pos.x; i <= size.x+pos.x; i++)
@@ -38,20 +27,20 @@ void sprite::draw()
 	}
 }
 
-/// \brief
-/// Sprite move function.
-/// \details
-/// Add the parameter x and y coordinates to the objects' current position coordinates.
-void sprite::move(vector2i coords)
+void sprite::paddle_move(vector2i coords)
+{
+	if(pos.y+coords.y > 0 && pos.y+size.y+coords.y < 64)
+	{
+		pos.y += coords.y;
+	}
+}
+
+void sprite::ball_move(vector2i coords)
 {
 	pos.x += coords.x;
 	pos.y += coords.y;
 }
 
-/// \brief
-/// Collision detection.
-///	\details
-///	returns a char based on what it collided with. an l for level, p for player, n for npc or 0 if nothing.
 char sprite::bCollides(sprite & player, sprite & npc)
 {
 	if(pos.y <= 0 || pos.y >= 64-size.y)
@@ -70,10 +59,6 @@ char sprite::bCollides(sprite & player, sprite & npc)
 	}
 }
 
-/// \brief
-/// Game over check.
-/// \details
-/// Checks if the objects' position exceeds the screens' horizontal boundaries.
 bool sprite::bGame_over()
 {
 	if(pos.x <= 0 || pos.x >= 128-size.x)
@@ -84,10 +69,6 @@ bool sprite::bGame_over()
 	return false;
 }
 
-/// \brief
-/// Set position function.
-/// \details
-/// Sets the objects' position coordinates to the \p moveto coordinates.
 void sprite::setPos(vector2i moveto)
 {
 	pos.x = moveto.x;

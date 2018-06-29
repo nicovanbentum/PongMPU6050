@@ -1,3 +1,12 @@
+//==========================================================
+// Nico van Bentum | nico.vanbentum@student.hu.nl
+// 
+// Distributed under the Boost Software License, Version 1.0. 
+// http://www.boost.org/LICENSE_1_0.txt
+//==========================================================
+//
+/// @file
+
 #ifndef VECTOR2I_HPP
 #define VECTOR2I_HPP
 
